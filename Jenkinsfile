@@ -3,7 +3,8 @@ pipeline {
     stages {
         stage('Chekout From Git') {
             steps {
-                git branch 'prod', url: 'https://github.com/Habizanoor/enahanced-petclinc-springboot.git'
+                git branch: 'prod', url: 'https://github.com/Habizanoor/enahanced-petclinc-springboot.git'
+
             }
         }
         stage('Maven Compile') {
