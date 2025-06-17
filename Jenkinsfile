@@ -1,18 +1,24 @@
 pipeline {
-    agent {label 'linux-agent'}
+    agent { label 'linux-agent' }
+
+    tools {
+        maven 'maven3' // Ensure "maven3" matches your Jenkins Global Tool Configuration
+    }
+
     stages {
-        stage('Chekout From Git') {
+        stage('Checkout From Git') {
             steps {
                 git branch: 'prod', url: 'https://github.com/Habizanoor/enahanced-petclinc-springboot.git'
-
             }
         }
+
         stage('Maven Compile') {
             steps {
                 echo 'This is Maven Compile stage'
                 sh 'mvn compile'
             }
         }
+
         stage('Maven Test') {
             steps {
                 echo 'This is Maven Test stage'
@@ -21,3 +27,4 @@ pipeline {
         }
     }
 }
+
