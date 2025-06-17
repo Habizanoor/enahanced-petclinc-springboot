@@ -1,24 +1,20 @@
 pipeline {
-    agent { label 'linux-agent'}
-    tools {
-        maven 'maven'
-    }
+    agent {label 'linux-agent'}
     stages {
-        stage('Checkout From Git') { 
+        stage('Chekout From Git') {
             steps {
-               git branch: 'main', url: 'https://github.com/Habizanoor/enahanced-petclinc-springboot.git'
-
+                git branch 'prod', url: 'https://github.com/Habizanoor/enahanced-petclinc-springboot.git'
             }
         }
-        stage('Maven Compile') { 
+        stage('Maven Compile') {
             steps {
-                echo 'This Maven Compile Stage'
+                echo 'This is Maven Compile stage'
                 sh 'mvn compile'
             }
         }
-        stage('Maven Test') { 
+        stage('Maven Test') {
             steps {
-                echo 'This Maven Test Stage'
+                echo 'This is Maven Test stage'
                 sh 'mvn test'
             }
         }
