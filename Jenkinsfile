@@ -5,6 +5,10 @@ pipeline {
         maven 'maven3' // Ensure "maven3" matches your Jenkins Global Tool Configuration
     }
 
+    environment{
+        IMAGE_NAME = "spring-boot"
+        IMAGE_TAG = "latest"
+    }
     stages {
         stage('Checkout From Git') {
             steps {
@@ -67,5 +71,15 @@ pipeline {
                 sh 'mvn package'
             }
         }
+        stage('Docker Build') { 
+            steps {
+                script{
+                    echo 'Creating Docker Image'
+                        docker.build("$IMAGE_NAME:$IMAGE_TAG")
+                }
+                
+            }
+        }
+
     }
 }
