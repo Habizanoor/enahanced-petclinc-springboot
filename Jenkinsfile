@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'linux-agent' }
+    agent any
 
     tools {
         maven 'maven3' // Ensure "maven3" matches your Jenkins Global Tool Configuration
