@@ -25,7 +25,15 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('MFile System Scan By Trivy') {
+        stage('File System Scan By Trivy') {
+            steps {
+                echo 'Trivy scanning started'
+                sh 'trivy fs --format table --output trivy-report.txt --severity HIGH,CRITICAL .'
+
+
+            }
+        }
+        stage('Sonar Analysis') {
             steps {
                 echo 'Trivy scanning started'
                 sh 'trivy fs --format table --output trivy-report.txt --severity HIGH,CRITICAL .'
