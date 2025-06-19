@@ -28,7 +28,7 @@ pipeline {
         stage('MFile System Scan By Trivy') {
             steps {
                 echo 'Trivy scanning started'
-                sh 'trivy fs --format table --output trivy-report.txt --severity HIGH, CRITICAL .'
+                sh 'trivy fs --format table --output trivy-report.txt --severity HIGH,CRITICAL .'
 
 
             }
