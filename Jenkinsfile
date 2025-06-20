@@ -8,6 +8,10 @@ pipeline {
     environment{
         IMAGE_NAME = "spring-boot"
         IMAGE_TAG = "latest"
+        ACR_NAME = "dockerregisry"
+        ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"
+        FULL_IMAGE_NAME = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}" //example : dockerregisry.azurecr.io/spring-boot:latest
+        TENANT_ID = "105943eb-0807-487d-acb3-e7c34ef4de26"
     }
     stages {
         stage('Checkout From Git') {
@@ -60,7 +64,7 @@ pipeline {
         //    steps {
         //        steps {
         //            timeout(time: 1, unit: 'MINUTES') {
-        //            waitForQualityGate abortPipeline: true, credentialsId: 'sonar-new'
+        //            waitForQualityGate abortPipeline: true, credentialsId: 'sonar'
         //            }
         //        }
         //    }
@@ -77,6 +81,20 @@ pipeline {
                     echo 'Creating Docker Image'
                         docker.build("$IMAGE_NAME:$IMAGE_TAG")
                 }
+                
+            }
+        }
+        stage('Azure Login to ACR') { 
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'azurespn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')])
+                    echo 'LOGIN TO Azure Container registry'
+                    script{
+                        sh '''
+                        az logiin --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID  
+                        az acr login --name $ACR_NAME
+                        '''
+                    }
+                    
                 
             }
         }
