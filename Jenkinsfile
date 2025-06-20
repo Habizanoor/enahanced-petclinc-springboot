@@ -97,5 +97,18 @@ pipeline {
                 }
             }
         }
+        stage('Docker Push') { 
+            steps {
+                script{
+                    echo 'Push Docker Image to registry'
+                       sh'''
+                       docker tag "${IMAGE_NAME}:${IMAGE_TAG}"  ${FULL_IMAGE_NAME}
+                       docker push ${FULL_IMAGE_NAME}
+                       '''
+
+                }
+                
+            }
+        }
     }
 }
