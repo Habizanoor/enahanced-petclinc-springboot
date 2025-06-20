@@ -12,6 +12,8 @@ pipeline {
         ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"
         FULL_IMAGE_NAME = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}" //example : dockerregisry.azurecr.io/spring-boot:latest
         TENANT_ID = "105943eb-0807-487d-acb3-e7c34ef4de26"
+        RESOURCE_GROUP = "demo-rg"
+        CLUSTER_NAME = "demo-eks"
     }
     stages {
         stage('Checkout From Git') {
@@ -108,6 +110,20 @@ pipeline {
 
                 }
                 
+            }
+        }
+        stage('Jenkins Login to AKS Cluster') { 
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'azurespn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')])
+                    {
+                script {
+                    sh '''
+                    echo "Jenkins Login to Cluster"
+                    az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
+                    az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+                    '''
+                    }
+                }
             }
         }
     }
